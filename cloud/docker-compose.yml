@@ -1,0 +1,27 @@
+version: '3'
+services:
+  db:
+    image: mysql:latest
+    environment:
+      - MYSQL_DATABASE=php_docker
+      - MYSQL_USER=php_docker
+      - MYSQL_PASSWORD=password
+      - MYSQL_ALLOW_EMPTY_PASSWORD=1
+    volumes:
+      - "./db:/docker-entrypoint-initdb.d"
+
+  www:
+    build: ./Dockerfile
+    volumes:
+      - "./src:/var/www/html"
+    ports:
+      - 3000:80
+      - 443:443
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - 5432:80
+    environment:
+     - PMA_HOST=db
+     - PMA_PORT=3306
